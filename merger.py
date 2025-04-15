@@ -10,9 +10,10 @@ if __name__ == '__main__':
         if filename.endswith('.geojson'):
             geojson_dict = json.load(open(os.path.join(folder, filename)))
             for line in geojson_dict['features']:
-                line.update({"filename":filename})
+                line['properties'].update({"filename":filename})
+                line['properties'].update({'segment_id':str(line['properties']['segment_id'])})
             new_dict["features"] += geojson_dict['features']
 
-    output_location = os.path.join(folder, "merged.geojson")
+    output_location = os.path.join(config['output_folder'], "merged.geojson")
     with open(output_location, "w") as outfile:
         json.dump(new_dict, outfile)
